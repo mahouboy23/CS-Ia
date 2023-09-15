@@ -1,0 +1,82 @@
+/* Updated CSS for index page */
+
+body {
+    background: #f0f0f0; /* Light gray background */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #333; /* Dark text color */
+}
+
+header {
+    background: #007BFF; /* Blue header background */
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 3px 0;
+    border-radius: 3px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.menu li {
+    margin: 0 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #fff; /* White link color */
+    font-weight: bold;
+    font-size: 1.2em;
+    transition: color 0.3s;
+}
+
+.menu a:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+.account {
+    display: flex;
+    align-items: center;
+}
+
+.account-info {
+    margin-right: 20px;
+}
+
+.account-info span {
+    font-weight: bold;
+}
+
+.container {
+    text-align: center;
+    margin: 50px auto;
+}
+
+h1 {
+    font-size: 3em;
+    color: #007BFF; /* Blue header text */
+}
+
+.description {
+    font-size: 1.5em;
+    margin: 20px 0;
+}

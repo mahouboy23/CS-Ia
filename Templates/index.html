@@ -1,20 +1,40 @@
 <!DOCTYPE html>
-<title>Task Maker</title>
 <html lang="en">
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
- <head>
+<head>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="/Static/style.css">
- </head>
-
- <body>
-   <h1>We do task</h1>
-     <p>bonjour<p>
- </body>
-
+   <link rel="stylesheet" href="/Static/index-style.css">
+   <title>Task Maker - Home</title>
+</head>
+<body>
+   <header>
+      <nav>
+         <div class="menu-icon" id="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+         </div>
+         <ul class="menu" id="menu">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+            <li><a href="#">Page 3</a></li>
+            <li><a href="#">Page 4</a></li>
+         </ul>
+      </nav>
+      <div class="account">
+         <div class="account-info">
+            <p>Welcome, <span>{{ name }}</span>!</p>
+         </div>
+         <div class="account-actions">
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            <a href="#" class="btn-settings">Settings</a>
+         </div>
+      </div>
+   </header>
+   <div class="container">
+      <h1>Task Maker</h1>
+      <p class="description">Organize Your Tasks with Ease</p>
+   </div>
+</body>
 </html>

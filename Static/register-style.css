@@ -1,4 +1,4 @@
-/* New CSS for login page */
+/* New CSS for registration page */
 
 body {
     background: #f0f0f0; /* Light gray background */
@@ -12,8 +12,8 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 450px; /* Adjust the container width as needed */
-    margin: 0 auto; /* Center-align the container horizontally with margin */
+    width: 450px;
+    margin: 0 auto;
 }
 
 h1 {
@@ -38,18 +38,17 @@ label {
     color: #333;
 }
 
-/* Center-align and make input boxes symmetrical */
 input[type="text"],
 input[type="password"] {
     width: 95%;
     padding: 10px;
     margin-top: 5px;
-    margin-bottom: 5px; /* Reduce margin for symmetry */
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.btn-login {
+.btn-register {
     background: #007BFF; /* Blue button background */
     color: #fff;
     padding: 10px 20px;
@@ -60,7 +59,7 @@ input[type="password"] {
     transition: background 0.3s;
 }
 
-.btn-login:hover {
+.btn-register:hover {
     background: #0056b3; /* Darker blue on hover */
 }
 
