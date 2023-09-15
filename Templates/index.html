@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <title>Task Maker</title>
 <html lang="en">
-
+{% if name %}
+  <h1>Hello {{ name }}!</h1>
+{% else %}
+  <h1>Hello, World!</h1>
+{% endif %}
  <head>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +14,7 @@
 
  <body>
    <h1>We do task</h1>
-   <p>hi<p> <p>Click <a href="/">here</a> to go home.</p>
+     <p>bonjour<p>
  </body>
 
 </html>
