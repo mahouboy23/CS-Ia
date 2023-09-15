@@ -1,27 +1,32 @@
 <!DOCTYPE html>
-<title>Task Maker</title>
 <html lang="en">
 
 <head>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="/Static/style.css">
+   <title>Login - Task Maker</title>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Please login</h1>
-    <br>
-    <form action="" method="post">
-      <input type="text" placeholder="Username" name="username" value="{{
-        request.form.username }}">
-       <input type="password" placeholder="Password" name="password" value="{{
-        request.form.password }}">
-      <input class="btn btn-default" type="submit" value="Login">
-    </form>
-    {% if error %}
-      <p class="error"><strong>Error:</strong> {{ error }}
-    {% endif %}
-  </div>
+   <div class="container">
+      <h1>Login - Task Maker</h1>
+      <p class="description">Please log in to your account.</p>
+      
+      <form action="{{ url_for('login') }}" method="post">
+         <div class="msg">{{ msg }}</div>
+
+         <label for="username">Username:</label>
+         <input type="text" id="username" name="username" placeholder="Enter Your Username" value="{{ request.form.username }}" required>
+
+         <label for="password">Password:</label>
+         <input type="password" id="password" name="password" placeholder="Enter Your Password" required>
+
+         <button type="submit" class="btn-login">Sign In</button>
+      </form>
+
+      <p class="bottom">Don't have an account? <a class="bottom" href="{{ url_for('register') }}">Sign Up here</a></p>
+   </div>
 </body>
+
 </html>
