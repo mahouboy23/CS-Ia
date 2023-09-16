@@ -80,3 +80,47 @@ h1 {
     font-size: 1.5em;
     margin: 20px 0;
 }
+
+/* Updated CSS for index page */
+
+/* ... your existing CSS ... */
+
+/* Add styles for the email section */
+.email-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff; /* White background for email section */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 5px; /* Rounded corners for email section */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for email section */
+}
+
+.email-section h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.email-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.email-section li {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9; /* Light gray background for each email box */
+    border-radius: 5px; /* Rounded corners for email boxes */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for each email box */
+}
+
+/* Style each part of the email */
+.email-section li strong {
+    font-weight: bold;
+}
+
+.email-section li p {
+    font-size: 1rem;
+    margin-top: 10px;
+}

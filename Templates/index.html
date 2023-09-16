@@ -36,5 +36,18 @@
       <h1>Task Maker</h1>
       <p class="description">Organize Your Tasks with Ease</p>
    </div>
+   <section class="email-section">
+      <h2>Emails</h2>
+      <ul>
+          {% for email in emails %}
+              <li>
+                  <strong>From:</strong> {{ email.sender }}<br>
+                  <strong>Subject:</strong> {{ email.subject }}<br>
+                  <strong>Timestamp:</strong> {{ email.timestamp }}<br>
+                  <p>{{ email.body }}</p>
+              </li>
+          {% endfor %}
+      </ul>
+  </section>
 </body>
 </html>
