@@ -19,7 +19,6 @@ app.config['MYSQL_DB'] = 'applogin'
 
 mysql = MySQL(app)
 
-# Function to fetch emails from Gmail using the Gmail API
 def fetch_emails(gmail_service):
     results = gmail_service.users().messages().list(userId='me', labelIds=['INBOX']).execute()
     messages = results.get('messages', [])
@@ -48,22 +47,17 @@ def fetch_emails(gmail_service):
 
     return emails
 
-# Store Emails in MySQL Database
 @app.route('/store_emails')
 def store_emails():
-    # Load Gmail API credentials from JSON file
     credentials = service_account.Credentials.from_service_account_file(
         'flaksapp-f7ba1924fc08.json',
         scopes=['https://www.googleapis.com/auth/gmail.readonly']
     )
 
-    # Create a Gmail service
     gmail_service = build('gmail', 'v1', credentials=credentials)
 
-    # Fetch emails from Gmail
     emails = fetch_emails(gmail_service)
 
-    # Store emails in the MySQL database
     for email_data in emails:
         email = Email(
             sender=email_data['sender'],
@@ -77,9 +71,6 @@ def store_emails():
 
     return 'Emails stored in the database'
 
-# Your existing routes...
-
-# Define a model for storing emails in the database
 class Email(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender = db.Column(db.String(255))
