@@ -14,7 +14,7 @@ import json
 app = Flask(__name__, template_folder='Templates', static_folder='Static')
 app.secret_key = 'hellodarknite' 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Hellodarknite@7@localhost/applogin' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Hellodarknite%407@localhost:3306/applogin' 
 db = SQLAlchemy(app)
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -42,6 +42,7 @@ def login():
     return redirect(authorization_url)
 
 class Email(db.Model):
+    __tablename__ = 'emails'
     id = db.Column(db.Integer, primary_key=True)
     sender = db.Column(db.String(255))
     subject = db.Column(db.String(255))
