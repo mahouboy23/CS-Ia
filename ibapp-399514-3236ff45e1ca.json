@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ibapp-399514",
+  "private_key_id": "3236ff45e1ca743ab73c5119d2fab2c4039521a1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC75JHLDWmC+aBB\nA7zRWSN/5xWpt+fciD/OqXlFWb/MHpurc3a8zk0I5KyrSP6FiPFoyyKa9C8D3bFt\nSpDD8qlk4JeJ6HXOyOQ6lanL+A6XVssPlL+H8oEsx77bclGvQiRv+KAirKeQAoZJ\ngATDeu34D9lFuEAje88h5gPy0HWe9cZpmlg4oSYRW6vQzAlhsZvktvdEKhtS1qMk\nEVkEhrD0g2AlPkcni7Kz90tdECRlGLh8EMOawD52jgo8VqEixiinH/tYS7USC6th\n4JZLiMbFsG3i21DswVELpvwS2G23ZSURg7O9B7qmdwqCebxxWGCe3ft3cFeCtOfy\nj6gMLtZrAgMBAAECggEANyKAQaRC5OMZSlqtaoUMrLiDm9TSXd1BVARZCKeoZ15H\n8cyk+AxVgJmRrYVy4n5n0IdjNTMYJLtGGDr8NfOcD3T0Isyq3S4IAsTuGWNF7NTU\nK1NLzLm1fA11DPID1DjFdnHvk500YkbLXwAI5c/JyrPj3tiNQZxQELNtTzAqg6U8\neHprq2hokl3eqRQmzo2Szg7tR5LO5FH61d1oq4dKURefD/xnxP6u9SMUEAoX+yro\nVGFvvvMdqLkkEhihnBXjBUUX9cgBLi9ZXzbYBTebL2OcX+B0ksYaRoxvzQkfjjjt\netwMvRrJ3Kg0ROZe3HqGUbKwTNoWpMYg2D2EECPIEQKBgQDiHtqQ2UJNghQvBWky\nIDx11DcV2dpIGKK4h7WtlCFEoBbmfuKh2Ap4CBPpiVGlPw00nIw10KSV1dKlPK9J\nD2AHfxorhsOIytoAYAWG3YoXXy3+Tg0stSKPckSRvxQMRNwT+y6PCbU9PzeGMLTB\n8p2BEhbDAJ87GV46RTZYqqyg+QKBgQDUuI9ZLe3lLqtaQD1sO4CNWx2wGgAUu7O8\nExwZOP4qT69/jV2Ndrcn9RbsRMlEA5Gcq1M+wH+s/wyPP00zPuU6xCffrK9qsd44\n0vfxn6cq8pslUkL5N4tp2iZ+fQWB80f2Zls4Cl/onGbC22fFrPhdAtPXGBkRdSmc\nD4g+XBDvgwKBgAwagrCGMJpdgB8UNxFL0HCuL1SoGJsLVopyGTN1XmKB/zfPSupG\n2iiaphY2F3y050wNpSOsS2MJ0wCtQuSyQf2kvA3gZM8JrKmgeitB6IZfveKC4wml\nmHf9MdZrV/NgLDeVlmRprJ3eqGYybTqEdhHWmglOGzfan8SWt9X/LMZhAoGBALC+\njHSnodNb3IoHeEGWivBodZldcRXJA8TQB/e5EA2t2f7cQZAJxJLRpHM5kBUP9gu7\nmlY4cZ0W6aOYEBf1OVeDpjHF9JZtJVwHhnXflnEr1NbEq9sQWKjh1jwgutPHhNJp\nJ3+/twK5+PQMgwOO/WmisMs2PZXwyFrf2O8fZf7rAoGBALXpNP/WI9EWpVHRbspn\nZj0Aq29aRfNmVcmu3HvSCs9v0zfTLj5ZBsJqTBIMbyHkWnUDaRTFd2SQjOQ5dN+/\ny8xXGETJuM01kj+lMO2YE7VIa+yr/sF9mElUZaLplWoJkwDGi4PTxhDMu/UqRwuG\nLPiR4sSHgFyUumQyAtQ37EDn\n-----END PRIVATE KEY-----\n",
+  "client_email": "ibservice@ibapp-399514.iam.gserviceaccount.com",
+  "client_id": "112066730644756498239",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ibservice%40ibapp-399514.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

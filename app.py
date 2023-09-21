@@ -1,3 +1,5 @@
+from google_auth_oauthlib.flow import Flow
+from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from flask import Flask, render_template, redirect, url_for, request, session
@@ -5,6 +7,9 @@ from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
 import MySQLdb.cursors
 import re
+import base64
+import datetime
+import json
 
 app = Flask(__name__, template_folder='Templates', static_folder='Static')
 app.secret_key = 'hellodarknite' 
@@ -19,14 +24,53 @@ app.config['MYSQL_DB'] = 'applogin'
 
 mysql = MySQL(app)
 
-def fetch_emails(gmail_service):
-    results = gmail_service.users().messages().list(userId='me', labelIds=['INBOX']).execute()
-    messages = results.get('messages', [])
+flow = Flow.from_client_secrets_file(
+    'client_secret_243682902417-cbvnp0omb7kmo0ge6tb6abmear2lftbs.apps.googleusercontent.com.json',  
+    scopes=['https://www.googleapis.com/auth/gmail.readonly'],  
+    redirect_uri='http://localhost:5000/oauth2callback'  
+)
 
-    emails = []
+@app.route('/login')
+def login():
+    flow = Flow.from_client_secrets_file(
+    'client_secret_243682902417-cbvnp0omb7kmo0ge6tb6abmear2lftbs.apps.googleusercontent.com.json',  
+    scopes=['https://www.googleapis.com/auth/gmail.readonly'],  
+    redirect_uri='http://localhost:5000/oauth2callback'  
+)
+    authorization_url, state = flow.authorization_url()
+    session['state'] = state
+    return redirect(authorization_url)
+
+class Email(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.String(255))
+    subject = db.Column(db.String(255))
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime)
+
+    def __init__(self, sender, subject, body, timestamp):
+        self.sender = sender
+        self.subject = subject
+        self.body = body
+        self.timestamp = timestamp
+
+@app.route('/oauth2callback')
+def oauth2callback():
+    if 'state' not in session:
+        return redirect(url_for('login'))
+
+    state = session['state']
+    flow.fetch_token(authorization_response=request.url, state=state)
+    credentials = flow.credentials
+
+    gmail_service = build('gmail', 'v1', credentials=credentials)
+
+    results = gmail_service.users().messages().list(userId='me', q='is:unread').execute()
+    messages = results.get('messages', [])
 
     for message in messages:
         msg = gmail_service.users().messages().get(userId='me', id=message['id']).execute()
+
         email_data = {
             'sender': None,
             'subject': None,
@@ -40,25 +84,10 @@ def fetch_emails(gmail_service):
             elif header['name'] == 'Subject':
                 email_data['subject'] = header['value']
             elif header['name'] == 'Date':
-                email_data['timestamp'] = header['value']
+                email_data['timestamp'] = datetime.datetime.strptime(header['value'], "%a, %d %b %Y %H:%M:%S %z")
 
-        email_data['body'] = msg['snippet']
-        emails.append(email_data)
+        email_data['body'] = base64.urlsafe_b64decode(msg['payload']['parts'][0]['body']['data']).decode('utf-8')
 
-    return emails
-
-@app.route('/store_emails')
-def store_emails():
-    credentials = service_account.Credentials.from_service_account_file(
-        'flaksapp-f7ba1924fc08.json',
-        scopes=['https://www.googleapis.com/auth/gmail.readonly']
-    )
-
-    gmail_service = build('gmail', 'v1', credentials=credentials)
-
-    emails = fetch_emails(gmail_service)
-
-    for email_data in emails:
         email = Email(
             sender=email_data['sender'],
             subject=email_data['subject'],
@@ -69,23 +98,15 @@ def store_emails():
 
     db.session.commit()
 
-    return 'Emails stored in the database'
-
-class Email(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    sender = db.Column(db.String(255))
-    subject = db.Column(db.String(255))
-    body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime)
-
+    return redirect(url_for('index'))
 
 @app.route('/index')
 def index():
     emails = Email.query.all()
     return render_template('index.html', emails=emails)
 
-@app.route('/', methods=['GET', 'POST'])
-def login():
+@app.route('/login_page', methods=['GET', 'POST'])
+def login_page():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
@@ -135,6 +156,10 @@ def register():
     elif request.method == 'POST':
         msg = 'Please fill out the form!'
     return render_template('register.html', msg=msg)
+
+@app.route('/')
+def entry():
+    return render_template('entry.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
