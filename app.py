@@ -1,21 +1,28 @@
+from flask import Flask
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
-from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import and_
+from google.oauth2.credentials import Credentials
+from datetime import datetime
 import MySQLdb.cursors
 import re
 import base64
 import datetime
-import json
+from flask_migrate import Migrate
+import os
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__, template_folder='Templates', static_folder='Static')
 app.secret_key = 'hellodarknite' 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Hellodarknite%407@localhost:3306/applogin' 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'  
@@ -48,17 +55,50 @@ class Email(db.Model):
     subject = db.Column(db.String(255))
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime)
+    body_html = db.Column(db.Text)
 
-    def __init__(self, sender, subject, body, timestamp):
+    def __init__(self, sender, subject, body, body_html, timestamp):
         self.sender = sender
         self.subject = subject
         self.body = body
         self.timestamp = timestamp
+        self.body_html = body_html  
+        
+def remove_old_duplicates():
+    """
+    Remove old duplicate emails from the database based on sender, subject, and timestamp.
+    """
+    unique_emails = db.session.query(
+        Email.sender, Email.subject, Email.timestamp, db.func.min(Email.id)
+    ).group_by(Email.sender, Email.subject, Email.timestamp).all()
+
+    duplicate_ids = []
+    for sender, subject, timestamp, min_id in unique_emails:
+        duplicate_ids.extend(
+            db.session.query(Email.id).filter(
+                and_(
+                    Email.sender == sender,
+                    Email.subject == subject,
+                    Email.timestamp == timestamp,
+                    Email.id != min_id  
+                )
+            ).all()
+        )
+
+    for duplicate_id in duplicate_ids:
+        Email.query.filter_by(id=duplicate_id[0]).delete()
+
+    db.session.commit()
 
 @app.route('/oauth2callback')
 def oauth2callback():
     if 'state' not in session:
         return redirect(url_for('login'))
+    
+    received_state = request.args.get('state')
+
+    if received_state != session['state']:
+        return "Invalid state parameter. Possible CSRF attack."
 
     state = session['state']
     flow.fetch_token(authorization_response=request.url, state=state)
@@ -71,12 +111,17 @@ def oauth2callback():
 
     for message in messages:
         msg = gmail_service.users().messages().get(userId='me', id=message['id']).execute()
+        existing_email = Email.query.filter_by(id=msg['id']).first()
 
+        if existing_email:
+            continue  
+        
         email_data = {
             'sender': None,
             'subject': None,
             'body': None,
-            'timestamp': None
+            'timestamp': None,
+            'body_html': None
         }
 
         for header in msg['payload']['headers']:
@@ -85,25 +130,98 @@ def oauth2callback():
             elif header['name'] == 'Subject':
                 email_data['subject'] = header['value']
             elif header['name'] == 'Date':
-                email_data['timestamp'] = datetime.datetime.strptime(header['value'], "%a, %d %b %Y %H:%M:%S %z")
+                date_str = header['value'].replace('GMT', '+0000')
+                email_data['timestamp'] = datetime.datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
 
-        email_data['body'] = base64.urlsafe_b64decode(msg['payload']['parts'][0]['body']['data']).decode('utf-8')
+        for part in msg['payload']['parts']:
+            if part['mimeType'] == 'text/html':
+                email_data['body_html'] = base64.urlsafe_b64decode(part['body']['data']).decode('utf-8')
 
         email = Email(
             sender=email_data['sender'],
             subject=email_data['subject'],
             body=email_data['body'],
-            timestamp=email_data['timestamp']
+            timestamp=email_data['timestamp'],
+            body_html=email_data['body_html']  
         )
-        db.session.add(email)
+        try:
+            db.session.add(email)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+        
+        remove_old_duplicates()
+            
+    return redirect(url_for('index'))
 
-    db.session.commit()
+@app.route('/refresh-emails')
+def refresh_emails():
+    # Check if the user has authorized the application
+    if 'credentials' not in session:
+        return redirect(url_for('login'))
 
+    # Load credentials from the session
+    creds = Credentials.from_authorized_user_info(session['credentials'])
+
+    if not creds.valid:
+        return redirect(url_for('login'))
+
+    # Build the Gmail API service
+    service = build('gmail', 'v1', credentials=creds)
+
+    # Fetch emails
+    results = service.users().messages().list(userId='me', q='is:unread').execute()
+    messages = results.get('messages', [])
+
+    for message in messages:
+        msg = service.users().messages().get(userId='me', id=message['id']).execute()
+        existing_email = Email.query.filter_by(id=msg['id']).first()
+
+        if existing_email:
+            continue
+
+        email_data = {
+            'sender': None,
+            'subject': None,
+            'body': None,
+            'timestamp': None,
+            'body_html': None
+        }
+
+        for header in msg['payload']['headers']:
+            if header['name'] == 'From':
+                email_data['sender'] = header['value']
+            elif header['name'] == 'Subject':
+                email_data['subject'] = header['value']
+            elif header['name'] == 'Date':
+                date_str = header['value'].replace('GMT', '+0000')
+                email_data['timestamp'] = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
+
+        for part in msg['payload']['parts']:
+            if part['mimeType'] == 'text/html':
+                email_data['body_html'] = base64.urlsafe_b64decode(part['body']['data']).decode('utf-8')
+
+        email = Email(
+            sender=email_data['sender'],
+            subject=email_data['subject'],
+            body=email_data['body'],
+            timestamp=email_data['timestamp'],
+            body_html=email_data['body_html']
+        )
+        try:
+            db.session.add(email)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+
+        remove_old_duplicates()
+
+    # Redirect back to the index page
     return redirect(url_for('index'))
 
 @app.route('/index')
 def index():
-    emails = Email.query.all()
+    emails = Email.query.order_by(Email.timestamp.desc()).all()
     return render_template('index.html', emails=emails)
 
 @app.route('/login_page', methods=['GET', 'POST'])

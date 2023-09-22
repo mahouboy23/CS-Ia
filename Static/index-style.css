@@ -1,5 +1,3 @@
-/* Updated CSS for index page */
-
 body {
     background: #f0f0f0; /* Light gray background */
     margin: 0;
@@ -123,4 +121,39 @@ h1 {
 .email-section li p {
     font-size: 1rem;
     margin-top: 10px;
+}
+.see-more-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.see-less-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.see-more-button:hover {
+    background-color: #0056b3;
+}
+
+#refresh-emails-button {
+    background-color: #007BFF; 
+    color: #fff; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer;
+    font-size: 16px; 
+}
+
+#refresh-emails-button:hover {
+    background-color: #0056b3; 
 }
