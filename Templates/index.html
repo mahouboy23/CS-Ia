@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/Static/index-style.css">
+   <title>Task Maker - Home</title>
+</head>
+<body>
+   <header>
+      <nav>
+         <div class="menu-icon" id="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+         </div>
+         <ul class="menu" id="menu">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+            <li><a href="#">Page 3</a></li>
+            <li><a href="#">Page 4</a></li>
+         </ul>
+      </nav>
+      <div class="account">
+         <div class="account-info">
+            <p>Welcome, <span>{{ name }}</span>!</p>
+         </div>
+         <div class="account-actions">
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            <a href="#" class="btn-settings">Settings</a>
+         </div>
+      </div>
+   </header>
+   <div class="container">
+      <h1>Task Maker</h1>
+      <p class="description">Organize Your Tasks with Ease</p>
+   </div>
+   <section class="email-section">
+      <h2>Emails</h2>
+      <button id="refresh-emails-button" onclick="window.location.href='/refresh-emails'">Actualize</button>
+      <ul>
+          {% for email in emails %}
+              <li>
+                  <strong>From:</strong> {{ email.sender }}<br>
+                  <strong>Subject:</strong> {{ email.subject }}<br>
+                  <strong>Timestamp:</strong> {{ email.timestamp }}<br>
+                  <p>
+                      {% if email.body_html is not none %}
+                          <span id="email-body-html-{{ email.id }}" style="display:none;">{{ email.body_html|safe }}</span>
+                          <button class="see-more-button" data-email-id="{{ email.id }}">See More</button>
+                          <button class="see-less-button" data-email-id="{{ email.id }}" style="display:none;">See Less</button>
+                      {% else %}
+                          <span id="email-body-html-{{ email.id }}" style="display:none;"></span>
+                      {% endif %}
+                  </p>
+              </li>
+          {% endfor %}
+      </ul>
+  </section>
+    
+</body>
+</html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+   const seeMoreButtons = document.querySelectorAll(".see-more-button");
+   const seeLessButtons = document.querySelectorAll(".see-less-button");
+
+   seeMoreButtons.forEach((button) => {
+       button.addEventListener("click", function () {
+           const emailId = this.getAttribute("data-email-id");
+           const emailBodyHtml = document.querySelector(`#email-body-html-${emailId}`);
+
+           emailBodyHtml.style.display = "block";
+           this.style.display = "none";
+           const seeLessButton = document.querySelector(`.see-less-button[data-email-id="${emailId}"]`);
+           seeLessButton.style.display = "block";
+       });
+   });
+
+   seeLessButtons.forEach((button) => {
+       button.addEventListener("click", function () {
+           const emailId = this.getAttribute("data-email-id");
+           const emailBodyHtml = document.querySelector(`#email-body-html-${emailId}`);
+
+           emailBodyHtml.style.display = "none";
+           this.style.display = "none";
+           const seeMoreButton = document.querySelector(`.see-more-button[data-email-id="${emailId}"]`);
+           seeMoreButton.style.display = "block";
+       });
+   });
+   refreshEmailsButton.addEventListener("click", function () {
+      // You can add AJAX or fetch request here to refresh the email list
+      // For example:
+      fetch("/refresh-emails")
+          .then((response) => response.json())
+          .then((data) => {
+              // Update the email list with the refreshed data
+              // You can manipulate the DOM to add new emails, remove deleted ones, etc.
+              console.log("Emails refreshed:", data);
+          })
+          .catch((error) => {
+              console.error("Error refreshing emails:", error);
+          });
+  });
+});
+</script>

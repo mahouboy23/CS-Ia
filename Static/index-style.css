@@ -1,0 +1,159 @@
+body {
+    background: #f0f0f0; /* Light gray background */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #333; /* Dark text color */
+}
+
+header {
+    background: #007BFF; /* Blue header background */
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 3px 0;
+    border-radius: 3px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.menu li {
+    margin: 0 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #fff; /* White link color */
+    font-weight: bold;
+    font-size: 1.2em;
+    transition: color 0.3s;
+}
+
+.menu a:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+.account {
+    display: flex;
+    align-items: center;
+}
+
+.account-info {
+    margin-right: 20px;
+}
+
+.account-info span {
+    font-weight: bold;
+}
+
+.container {
+    text-align: center;
+    margin: 50px auto;
+}
+
+h1 {
+    font-size: 3em;
+    color: #007BFF; /* Blue header text */
+}
+
+.description {
+    font-size: 1.5em;
+    margin: 20px 0;
+}
+
+/* Updated CSS for index page */
+
+/* ... your existing CSS ... */
+
+/* Add styles for the email section */
+.email-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff; /* White background for email section */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 5px; /* Rounded corners for email section */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for email section */
+}
+
+.email-section h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.email-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.email-section li {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9; /* Light gray background for each email box */
+    border-radius: 5px; /* Rounded corners for email boxes */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for each email box */
+}
+
+/* Style each part of the email */
+.email-section li strong {
+    font-weight: bold;
+}
+
+.email-section li p {
+    font-size: 1rem;
+    margin-top: 10px;
+}
+.see-more-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.see-less-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.see-more-button:hover {
+    background-color: #0056b3;
+}
+
+#refresh-emails-button {
+    background-color: #007BFF; 
+    color: #fff; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer;
+    font-size: 16px; 
+}
+
+#refresh-emails-button:hover {
+    background-color: #0056b3; 
+}
